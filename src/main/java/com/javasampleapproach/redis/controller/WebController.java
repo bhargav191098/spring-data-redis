@@ -69,4 +69,14 @@ public class WebController {
 		customerRepository.save(new Customer( id, fname,lname));
 		return "Done";
 	}
+	@RequestMapping("/Replace")
+    public String replace(@RequestParam("id")Long id,@RequestParam("fname")String fname, @RequestParam("lname")String lname){
+	    Customer c= customerRepository.find(id);
+	    c.setFirstName(fname);
+	    c.setLastName(lname);
+
+	    customerRepository.update(c);
+
+	    return "Done" ;
+    }
 }
