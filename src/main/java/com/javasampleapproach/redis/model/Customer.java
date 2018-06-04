@@ -9,6 +9,8 @@ public class Customer implements Serializable {
 	private long id;
 	private String firstName;
 	private String lastName;
+	private String email;
+	private String passwd;
 
 	protected Customer() {
 	}
@@ -19,6 +21,19 @@ public class Customer implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getEmail(){
+		return email;
+	}
+	public String getPasswd(){
+		return passwd;
+	}
+	public void setEmail(String e){
+		this.email=e;
+	}
+	public void setPasswd(String p){
+		this.passwd=p;
 	}
 
 	public String getFirstName() {
@@ -37,14 +52,16 @@ public class Customer implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public Customer(long id, String firstName, String lastName) {
+	public Customer(long id, String firstName, String lastName, String email,String passwd) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.passwd=passwd;
+		this.email=email;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Customer[id=%d, firstName='%s', lastName='%s']", id, firstName, lastName);
+		return String.format("Customer[id=%d, firstName='%s', lastName='%s' , email = '%s']", id, firstName, lastName,email);
 	}
 }
