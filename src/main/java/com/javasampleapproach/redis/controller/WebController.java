@@ -19,11 +19,11 @@ public class WebController {
 	@RequestMapping("/save")
 	public String save() {
 		// save a single Customer
-		customerRepository.save(new Customer( 1, "Jack", "Smith"));
-		customerRepository.save(new Customer(2, "Adam", "Johnson"));
-		customerRepository.save(new Customer(3, "Kim", "Smith"));
-		customerRepository.save(new Customer(4, "David", "Williams"));
-		customerRepository.save(new Customer(5, "Peter", "Davis"));
+		customerRepository.save(new Customer( 1, "Jack", "Smith","jack@gmail.com","test"));
+		customerRepository.save(new Customer(2, "Adam", "Johnson","adam@gmail.com","test1"));
+		customerRepository.save(new Customer(3, "Kim", "Smith","kim@gmail.com","test2"));
+		customerRepository.save(new Customer(4, "David", "Williams","david@gmail.com","test3"));
+		customerRepository.save(new Customer(5, "Peter", "Davis","Peter@gmail.com","test4"));
 
 		return "Done";
 	}
@@ -31,7 +31,7 @@ public class WebController {
 	@RequestMapping("/findall")
 	public String findAll() {
 		String result = "";
-		Map<Long, Customer> customers = customerRepository.findAll();
+		Map<String, Customer> customers = customerRepository.findAll(); // Change Longs to Strings here, add log in, add find by email id, add Check by EMail, add
 
 		for (Customer customer : customers.values()) {
 			result += customer.toString() + "<br>";
@@ -59,24 +59,43 @@ public class WebController {
 	}
 
 	@RequestMapping("/delete")
-	public String deleteById(@RequestParam("id") Long id) {
-		customerRepository.delete(id);
+	public String deleteById(@RequestParam("email") String e) {
+		customerRepository.delete(e);
 
 		return "Done";
 	}
-	@RequestMapping("/add")
-	public String add(@RequestParam("id") Long id,@RequestParam("fname")String fname,@RequestParam("lname")String lname){
-		customerRepository.save(new Customer( id, fname,lname));
-		return "Done";
+	@RequestMapping("/updateFirstName")
+	public String update1(@RequestParam("email")String e,@RequestParam("name")String n){
+		Customer c=customerRepository.findbyemail(e);
+		c.setFirstName(n);
+		customerRepository.update(c);
+		return "Name updated!";
+
 	}
-	@RequestMapping("/Replace")
-    public String replace(@RequestParam("id")Long id,@RequestParam("fname")String fname, @RequestParam("lname")String lname){
-	    Customer c= customerRepository.find(id);
-	    c.setFirstName(fname);
-	    c.setLastName(lname);
+    @RequestMapping("/updateLastName")
+    public String update2(@RequestParam("email")String e,@RequestParam("name")String n){
+        Customer c=customerRepository.findbyemail(e);
+        c.setLastName(n);
+        customerRepository.update(c);
+        return "Last Name updated!";
 
-	    customerRepository.update(c);
-
-	    return "Done" ;
     }
+
+	@RequestMapping("/add")
+	public String add(@RequestParam("id") Long id,@RequestParam("fname")String fname,@RequestParam("lname")String lname,@RequestParam("email")String e,@RequestParam("passwd")String p){
+		customerRepository.save(new Customer( id, fname,lname,e,p));
+		return "Done";
+	}
+	@RequestMapping("/Login")
+    public String log(@RequestParam("email")String e,@RequestParam("passwd")String p){
+	    int j = customerRepository.login(e,p);
+	    if(j==1)
+	        return "Successful Login";
+	    else if(j==0)
+	        return "Incorrect Password";
+	    else
+	        return "Invalid Email-ID";
+    }
+
+
 }
