@@ -17,7 +17,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 	private static final String KEY = "Customer";
 
 	private RedisTemplate<String, Object> redisTemplate;
-	private HashOperations<String, Long, Customer> hashOperations;
+	private HashOperations<String, String, Customer> hashOperations;
 
 	@Autowired
 	public CustomerRepositoryImpl(RedisTemplate<String, Object> redisTemplate) {
@@ -31,7 +31,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
 	@Override
 	public void save(Customer customer) {
-		hashOperations.put(KEY, customer.getId(), customer);
+		hashOperations.put(KEY, customer.getEmail(), customer);
 	}
 
 	@Override
@@ -40,18 +40,38 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 	}
 
 	@Override
-	public Map<Long, Customer> findAll() {
+	public Customer findbyemail(String email){
+		return hashOperations.get(KEY,email);
+	}
+
+	@Override
+	public Map<String,Customer> findAll() {
 		return hashOperations.entries(KEY);
 	}
 
 	@Override
 	public void update(Customer customer) {
-		hashOperations.put(KEY, customer.getId(), customer);
+		hashOperations.put(KEY, customer.getEmail(), customer);
+	}
+	@Override
+    public void update_email_id(Customer c){
+	    hashOperations.put(KEY,c.getEmail(),c);
+    }
+
+	@Override
+	public void delete(String e) {
+		hashOperations.delete(KEY, e);
 	}
 
 	@Override
-	public void delete(Long id) {
-		hashOperations.delete(KEY, id);
+	public int login(String email,String passwd){
+		Customer c = findbyemail(email);
+		if(c==null)
+			return 3;
+		if(c.getPasswd().equals(passwd))
+			return 1;
+		else
+			return 0;
 	}
 
 }
