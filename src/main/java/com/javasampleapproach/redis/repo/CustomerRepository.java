@@ -5,10 +5,14 @@ import java.util.Map;
 import com.javasampleapproach.redis.model.Customer;
 
 public interface CustomerRepository {
-
+	int login(String email,String passwd);
 	void save(Customer customer);
 	Customer find(Long id);
-	Map<Long, Customer> findAll();
+	Customer findbyemail(String email);
+	Map<String, Customer> findAll();
 	void update(Customer customer);
-	void delete(Long id);
+	void delete(String e);
+	void update_email_id(Customer c);
+
 }
+
