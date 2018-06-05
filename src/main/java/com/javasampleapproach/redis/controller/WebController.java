@@ -86,7 +86,7 @@ public class WebController {
 		customerRepository.save(new Customer( id, fname,lname,e,p));
 		return "Done";
 	}
-	@RequestMapping("/Login")
+	@RequestMapping("/Login",method = RequestMethod.GET)
     public String log(@RequestParam("email")String e,@RequestParam("passwd")String p){
 	    int j = customerRepository.login(e,p);
 	    if(j==1)
