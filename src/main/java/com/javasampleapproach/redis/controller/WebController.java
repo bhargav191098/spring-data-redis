@@ -86,15 +86,18 @@ public class WebController {
 		customerRepository.save(new Customer( id, fname,lname,e,p));
 		return "Done";
 	}
-	@RequestMapping("/Login",method = RequestMethod.GET)
-    public String log(@RequestParam("email")String e,@RequestParam("passwd")String p){
+	@CrossOrigin
+	@RequestMapping(value="/Login",method = RequestMethod.GET)
+    public JSONObject log(@RequestParam("email")String e,@RequestParam("passwd")String p){
+		JSONObject j1 = new JSONObject();
+		JSONObject j2 = new JSONObject();
+		j1.put("Login","Success");
+		j2.put("Login","Failed");
 	    int j = customerRepository.login(e,p);
 	    if(j==1)
-	        return "Successful Login";
-	    else if(j==0)
-	        return "Incorrect Password";
+	        return j1;
 	    else
-	        return "Invalid Email-ID";
+	    	return j2;
     }
 
 
